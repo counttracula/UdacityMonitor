@@ -26,20 +26,23 @@ std::string System::Kernel() {
   return LinuxParser::Kernel();
 } // Kernel()
 
-// TODO: Return the system's memory utilization
-float System::MemoryUtilization() { return 0.0; }
+
+float System::MemoryUtilization() { 
+  return LinuxParser::MemoryUtilization(); 
+} // MemoryUtilization()
 
 std::string System::OperatingSystem() { 
-  
   return LinuxParser::OperatingSystem(); 
-
 } // OperatingSystem()
 
-// TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { return 0; }
 
-// TODO: Return the total number of processes on the system
-int System::TotalProcesses() { return 0; }
+int System::RunningProcesses() { 
+  return LinuxParser::RunningProcesses();; 
+}
+
+int System::TotalProcesses() { 
+  return LinuxParser::TotalProcesses(); 
+} // TotalProcesses()
 
 long System::UpTime() {
   return LinuxParser::UpTime();

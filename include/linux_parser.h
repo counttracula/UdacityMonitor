@@ -1,8 +1,11 @@
 #ifndef SYSTEM_PARSER_H
 #define SYSTEM_PARSER_H
 
+#include <utility>
 #include <fstream>
 #include <regex>
+#include <string>
+#include <vector>
 #include <string>
 
 namespace LinuxParser {
@@ -43,7 +46,8 @@ enum CPUStates {
 std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
-long ActiveJiffies(int pid);
+// long ActiveJiffies(int pid);
+std::pair<long, long> ActiveJiffies(int pid);
 long IdleJiffies();
 
 // Processes
@@ -52,6 +56,11 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+  
+// Helpers
+long int Hertz();
+std::vector<std::string> split(const std::string& line, char delimiter);
+  
 };  // namespace LinuxParser
 
 #endif

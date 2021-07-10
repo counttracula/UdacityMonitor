@@ -19,7 +19,13 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() { 
+  for (int pid: LinuxParser::Pids()) {
+    Process proc = Process(pid);
+    processes_.emplace_back(proc);
+  }
+  return processes_; 
+}
 
 
 std::string System::Kernel() { 

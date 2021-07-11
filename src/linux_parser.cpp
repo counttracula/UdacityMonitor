@@ -78,7 +78,7 @@ vector<int> LinuxParser::Pids() {
       }
     }
   }
-  closedir(directory);
+  closedir(directory); 
   return pids;
 }
 
@@ -128,10 +128,8 @@ long LinuxParser::UpTime() {
   return upTime;
 } // UpTime()
 
-// TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { 
-  
-}
+// long LinuxParser::Jiffies() { 
+// }
 
 long int LinuxParser::Hertz() {
   return sysconf(_SC_CLK_TCK);
@@ -140,7 +138,7 @@ long int LinuxParser::Hertz() {
 pair<long, long> LinuxParser::ActiveJiffies(int pid) { 
 	const string kPid{'/' + to_string(pid)};
   	string line;
-  	long int utime, stime, cutime, cstime, startTime, totalTime, seconds;
+  	long int utime, stime, cutime, cstime, startTime, totalTime;
   	std::ifstream stream(kProcDirectory + kPid + kStatFilename);
     if (stream.is_open()) {
 	    std::getline(stream, line);
@@ -172,7 +170,7 @@ vector<string> LinuxParser::CpuUtilization() {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
       while (linestream >> key) {
-        if (key == "cpu") {
+        if (key.compare("cpu") == 0) {
           while (linestream >> value) {
           	cpuUtil.push_back(value);
           } // while
@@ -259,7 +257,7 @@ string LinuxParser::Ram(int pid) {
 	ram = stof(r);
 	ram /= 1024;
 
-  	return to_string(ram) + 'M'; 
+  	return to_string(ram); 
 }
 
 string LinuxParser::Uid(int pid) { 	
@@ -300,4 +298,4 @@ string LinuxParser::User(int pid) {
 }
 
 // Not necessary
-long int LinuxParser::UpTime(int pid) { return 0; }
+// long int LinuxParser::UpTime(int pid) { return 0; }

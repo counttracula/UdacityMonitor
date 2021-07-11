@@ -13,47 +13,47 @@ using std::string;
 using std::to_string;
 using std::vector;
 using std::pair;
+using std::sort;
 
 int Process::Pid() { 
   return pid_; 
 }
 
-// TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { 
   pair<long, long> jiffies = LinuxParser::ActiveJiffies(pid_);
   long totalTime = jiffies.first;
   long startTime = jiffies.second;
   long systemUpTime = LinuxParser::UpTime();
   long int hertz = LinuxParser::Hertz();
-  long seconds = systemUpTime - (startTime / hertz);
-  float cpuUsage = 100 * ((totalTime / hertz) / seconds);
+  float seconds = systemUpTime - (startTime / hertz);
+  float cpuUsage = 100.0 * float(totalTime / hertz) / seconds;
   return cpuUsage;
-} // CpuUtilization()
+} 
 
 string Process::Command() { 
-  return LinuxParser::Command(pid_); 
+  command_ = LinuxParser::Command(pid_);
+  return command_;
 }
 
 string Process::Ram() { 
   return LinuxParser::Ram(pid_);
 }
 
-// TODO: Return the user (name) that generated this process
 string Process::User() { 
-  return LinuxParser::User(pid_); 
+  user_ = LinuxParser::User(pid_); 
+  return user_;
 }
 
-// TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
 	pair<long, long> jiffies = LinuxParser::ActiveJiffies(pid_);
     long startTime = jiffies.second;
     long systemUpTime = LinuxParser::UpTime();
     long int hertz = LinuxParser::Hertz();
     long seconds = systemUpTime - (startTime / hertz);
-	return seconds;
+	uptime_ = seconds;
+  	return uptime_;
 }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-bool Process::operator<(Process const& a) const {                                   
-  return (uptime_ > a.uptime_); 
+bool Process::operator<(Process const& a) const { 
+  return (uptime_ < a.uptime_);
 }

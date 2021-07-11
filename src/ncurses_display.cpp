@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <algorithm>
 
 #include "format.h"
 #include "ncurses_display.h"
@@ -24,7 +25,7 @@ std::string NCursesDisplay::ProgressBar(float percent) {
 
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
-    display = " " + to_string(percent * 100).substr(0, 3);
+    display = " " + to_string(percent * 100).substr(0, 4);
   return result + " " + display + "/100%";
 }
 
@@ -70,6 +71,7 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   mvwprintw(window, row, command_column, "COMMAND");
   wattroff(window, COLOR_PAIR(2));
   int const num_processes = int(processes.size()) > n ? n : processes.size();
+  std::sort(processes.begin(), processes.end());
   for (int i = 0; i < num_processes; ++i) {
     mvwprintw(window, ++row, pid_column, to_string(processes[i].Pid()).c_str());
     mvwprintw(window, row, user_column, processes[i].User().c_str());

@@ -15,10 +15,9 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
+
 Processor& System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
   for (int pid: LinuxParser::Pids()) {
     Process proc = Process(pid);

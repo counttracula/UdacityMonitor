@@ -26,7 +26,6 @@ vector<string> LinuxParser::split(const string& line, char delimiter) {
 } // split()
 
 
-// DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -49,7 +48,6 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
   string os, version, kernel;
   string line;
@@ -74,7 +72,7 @@ vector<int> LinuxParser::Pids() {
       string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         int pid = stoi(filename);
-        pids.push_back(pid);
+        pids.emplace_back(pid);
       }
     }
   }
@@ -128,8 +126,6 @@ long LinuxParser::UpTime() {
   return upTime;
 } // UpTime()
 
-// long LinuxParser::Jiffies() { 
-// }
 
 long int LinuxParser::Hertz() {
   return sysconf(_SC_CLK_TCK);
@@ -153,12 +149,6 @@ pair<long, long> LinuxParser::ActiveJiffies(int pid) {
   	return std::make_pair(totalTime, startTime);
 }
 
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
-
 
 vector<string> LinuxParser::CpuUtilization() { 
   vector<string> cpuUtil;
@@ -172,7 +162,7 @@ vector<string> LinuxParser::CpuUtilization() {
       while (linestream >> key) {
         if (key.compare("cpu") == 0) {
           while (linestream >> value) {
-          	cpuUtil.push_back(value);
+          	cpuUtil.emplace_back(value);
           } // while
         } // if 
       } // while
@@ -235,7 +225,9 @@ string LinuxParser::Command(int pid) {
     std::istringstream linestream(line);
     linestream >> cmd;
   }
-  return cmd;
+  std::vector<std::string> cmdToken = split(cmd, '/');
+  
+  return cmdToken.back();
 }
 
 string LinuxParser::Ram(int pid) { 
@@ -247,7 +239,7 @@ string LinuxParser::Ram(int pid) {
       while (std::getline(stream, line)) {
         std::istringstream linestream(line);
         while (linestream >> mem) {
-	      if (mem.compare("VmSize:") == 0) {
+	      if (mem.compare("VmRSS:") == 0) {
     	    linestream >> r; 
             break;
           }
@@ -296,6 +288,3 @@ string LinuxParser::User(int pid) {
     }  // if
     return user;
 }
-
-// Not necessary
-// long int LinuxParser::UpTime(int pid) { return 0; }

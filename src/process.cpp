@@ -26,7 +26,7 @@ float Process::CpuUtilization() {
   long systemUpTime = LinuxParser::UpTime();
   long int hertz = LinuxParser::Hertz();
   float seconds = systemUpTime - (startTime / hertz);
-  float cpuUsage = 100.0 * float(totalTime / hertz) / seconds;
+  float cpuUsage = static_cast<float>(totalTime / hertz) / seconds;
   return cpuUsage;
 } 
 

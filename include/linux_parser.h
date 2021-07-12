@@ -60,6 +60,7 @@ long int UpTime(int pid);
 // Helpers
 long int Hertz();
 std::vector<std::string> split(const std::string& line, char delimiter);
+bool isFloat(const std::string& str);
   
 };  // namespace LinuxParser
 

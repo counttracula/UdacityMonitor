@@ -25,6 +25,11 @@ vector<string> LinuxParser::split(const string& line, char delimiter) {
    return tokens;
 } // split()
 
+// Check if the string is a floating point number
+bool LinuxParser::isFloat(const string& str)
+{
+    return str.find_first_not_of("0123456789.") == str.npos;
+}
 
 string LinuxParser::OperatingSystem() {
   string line;
@@ -225,13 +230,14 @@ string LinuxParser::Command(int pid) {
     std::istringstream linestream(line);
     linestream >> cmd;
   }
-  std::vector<std::string> cmdToken = split(cmd, '/');
   
-  return cmdToken.back();
+  return cmd;
 }
 
 string LinuxParser::Ram(int pid) { 
-    string r, line, mem;
+    string rStr;
+  	string line;
+  	string mem;
   	int ram;
     const string kPid{to_string(pid)};
     std::ifstream stream(kProcDirectory + kPid + kStatusFilename);
@@ -240,15 +246,19 @@ string LinuxParser::Ram(int pid) {
         std::istringstream linestream(line);
         while (linestream >> mem) {
 	      if (mem.compare("VmRSS:") == 0) {
-    	    linestream >> r; 
+    	    linestream >> rStr; 
             break;
           }
         } // while
 	  } // while
     } // if
-	ram = stof(r);
-	ram /= 1024;
 
+  	// sanitize input
+  	int firstNonFloat = rStr.find_first_not_of("0123456789.");
+    rStr = rStr.substr(0, firstNonFloat);
+  	ram = stof(rStr);
+  	ram /= 1024;
+    
   	return to_string(ram); 
 }
 

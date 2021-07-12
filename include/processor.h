@@ -43,7 +43,7 @@ public:
         guest = stoi(data[8]);
         guest_nice = stoi(data[9]);
    	} // ctor
- 	float Utilization();  
+ 	double Utilization();  
 };
 
 #endif

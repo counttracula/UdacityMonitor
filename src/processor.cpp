@@ -10,7 +10,7 @@ using std::vector;
 using std::string;
 using std::cout;
 
-float Processor::Utilization() { 
+double Processor::Utilization() { 
 	vector<string> uPrev = LinuxParser::CpuUtilization();
   	Processor prev(uPrev);
 	unsigned int sleepFor = 1000000; // 500ms 
